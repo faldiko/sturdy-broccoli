@@ -1,55 +1,5 @@
 script_name('Lesorub-Helper')
 
---------------------------------------
---           AUTO UPDATE            --
---------------------------------------
-local update = {
-    current_version = 1.00,
-    url_version = 'https://github.com/faldiko/sturdy-broccoli/blob/main/version.txt',
-    url_script  = 'https://raw.githubusercontent.com/YourName/YourRepo/main/Lesorub-Helper.lua',
-    script_path = thisScript().path
-}
-
-function download_url_to_file(url, path)
-    local f = io.popen(string.format('powershell -Command "(New-Object Net.WebClient).DownloadFile(\'%s\', \'%s\')"', url, path))
-    if f then f:close() end
-end
-
-function check_for_update()
-    lua_thread.create(function()
-        sampAddChatMessage("{00CCFF}[LesHelper] {FFFFFF}Проверка обновлений...", -1)
-        local temp_version_path = getWorkingDirectory() .. "\\LesHelper_version.txt"
-        download_url_to_file(update.url_version, temp_version_path)
-        wait(1200)
-
-        local f = io.open(temp_version_path, 'r')
-        if not f then
-            sampAddChatMessage("{FF0000}[LesHelper] {FFFFFF}Не удалось получить версию с сервера.", -1)
-            return
-        end
-
-        local latest_version = tonumber(f:read('*a'):match('%d+%.%d+'))
-        f:close()
-        os.remove(temp_version_path)
-
-        if latest_version and latest_version > update.current_version then
-            sampAddChatMessage(string.format("{00CCFF}[LesHelper] {FFFFFF}Найдена новая версия: {00CCFF}%.2f{FFFFFF} (текущая %.2f)", latest_version, update.current_version), -1)
-            sampAddChatMessage("{00CCFF}[LesHelper] {FFFFFF}Скачиваю обновление...", -1)
-
-            download_url_to_file(update.url_script, update.script_path)
-            wait(2000)
-            sampAddChatMessage("{00CCFF}[LesHelper] {FFFFFF}Обновление установлено. Перезапуск...", -1)
-            thisScript():reload()
-        else
-            sampAddChatMessage("{00CCFF}[LesHelper] {FFFFFF}Установлена последняя версия.", -1)
-        end
-    end)
-end
---------------------------------------
---         END AUTO UPDATE          --
---------------------------------------
-
-
 local imgui = require 'mimgui'
 local encoding = require 'encoding'
 local hotkey = require 'mimgui_hotkeys'
@@ -138,6 +88,7 @@ imgui.OnFrame(function() return Window[0] end, function()
         end
 
 
+        -- Вторая вкладка — посадка деревьев
         if imgui.BeginTabItem(u8'Посадка') then
             imgui.Checkbox(u8'Посадка деревьев', posadka)
             imgui.SameLine()
@@ -150,6 +101,7 @@ imgui.OnFrame(function() return Window[0] end, function()
 
             imgui.Separator()
 
+            -- Текст перед кнопкой бинда и сама кнопка (ShowHotKey)
             imgui.Text(u8'Клавиша для посадки:')
             imgui.SameLine()
             if exampleHotKey and exampleHotKey:ShowHotKey() then
@@ -174,7 +126,7 @@ imgui.OnFrame(function() return Window[0] end, function()
             imgui.Text('(?)')
             if imgui.IsItemHovered() then
                 imgui.BeginTooltip()
-                imgui.Text(u8'При включении вы сможете изменять размер окна вручную.')
+                imgui.Text(u8'При включении вы сможете изменять размер окна вручную, тянув за угол меню.')
                 imgui.EndTooltip()
             end
 
@@ -189,10 +141,8 @@ imgui.OnFrame(function() return Window[0] end, function()
     imgui.End()
 end)
 
-
 function main()
     while not isSampAvailable() do wait(100) end
-    check_for_update() -- <<< проверка обновления при загрузке
     lua_thread.create(RenderRadius)
     lua_thread.create(Collision)
     lua_thread.create(AutoPressH)
