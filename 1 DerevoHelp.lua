@@ -1,12 +1,11 @@
 script_name('Lesorub-Helper')
-script_version("1.0.1")
+script_version("00.00.01")
 
 local imgui = require 'mimgui'
 local encoding = require 'encoding'
 local hotkey = require 'mimgui_hotkeys'
 local inicfg = require 'inicfg'
 local sampev = require 'lib.samp.events'
-local ffi = require("ffi")
 
 encoding.default = 'CP1251'
 local u8 = encoding.UTF8
@@ -22,11 +21,12 @@ if enable_autoupdate then
         if autoupdate_loaded then
             Update.json_url = "https://raw.githubusercontent.com/faldiko/sturdy-broccoli/refs/heads/main/version.json?" .. tostring(os.clock())
             Update.prefix = "[" .. string.upper(thisScript().name) .. "]: "
-            Update.url = "https://github.com/"
+            Update.url = "https://raw.githubusercontent.com/faldiko/sturdy-broccoli/refs/heads/main/version.json"
         end
     end
 end
 
+-- Конфиг
 local cfg = inicfg.load({
     config = {
         bind = '[32]',
@@ -38,12 +38,17 @@ local cfg = inicfg.load({
 }, 'LesHelper.ini')
 inicfg.save(cfg, 'LesHelper.ini')
 
-local Window = new.bool(true)
+-- Переменные
+local Window = new.bool(false)
 local render = new.bool(false)
 local collision = new.bool(false)
 local posadka = new.bool(false)
 local prokachka = new.bool(false)
 local spilivanie = new.bool(false)
+local CameraZoomButton = new.bool(false)
+local camera_zoom_enabled = new.bool(cfg.config.camera_zoom_enabled or false)
+local enabled = false
+local locked = false
 
 local resizable = new.bool(cfg.config.resizable or false)
 local render_distance = new.float(cfg.config.render_distance or 10.0)
@@ -60,6 +65,7 @@ local checkboxData = {
     { u8'Спиливание деревьев', u8'При включенной функции, вы подбегаете к дереву и оно пилится автоматически', spilivanie }
 }
 
+-- ImGui меню
 imgui.OnFrame(function() return Window[0] end, function()
     local sw, sh = getScreenResolution()
     imgui.SetNextWindowPos(imgui.ImVec2(sw / 2.5, sh / 2), imgui.Cond.FirstUseEver)
@@ -69,16 +75,19 @@ imgui.OnFrame(function() return Window[0] end, function()
         flags = flags + imgui.WindowFlags.AlwaysAutoResize
     end
 
-    imgui.Begin(u8'Лесоруб хелпер', Window, flags)
+    imgui.Begin(u8'Penis Helper.lua', Window, flags)
 
     if imgui.BeginTabBar('Tabs') then
-        if imgui.BeginTabItem(u8'Основное') then
+        -- ?? Основное
+        if imgui.BeginTabItem(u8'Хелпер лесоруб') then
+            -- ?? Слайдер дистанции рендера над кнопкой
             if render[0] then
                 imgui.SliderFloat(u8'Дистанция рендера (м)', render_distance, 1.0, 50.0, '%.1f')
                 cfg.config.render_distance = render_distance[0]
                 inicfg.save(cfg, 'LesHelper.ini')
             end
 
+            -- ?? Основные чекбоксы (кроме посадки)
             for i, checkbox in ipairs(checkboxData) do
                 if i ~= 3 then
                     imgui.Checkbox(checkbox[1], checkbox[3])
@@ -92,6 +101,7 @@ imgui.OnFrame(function() return Window[0] end, function()
                 end
             end
 
+            -- ?? Настройки спиливания
             if spilivanie[0] then
                 imgui.SliderFloat(u8'Дистанция рубки', dist_spil, 0.5, 5.0, '%.2f')
                 imgui.SliderInt(u8'Задержка рубки (мс)', delay_spil, 10, 500)
@@ -100,12 +110,6 @@ imgui.OnFrame(function() return Window[0] end, function()
                 inicfg.save(cfg, 'LesHelper.ini')
             end
 
-            imgui.EndTabItem()
-        end
-
-
-        -- Вторая вкладка — посадка деревьев
-        if imgui.BeginTabItem(u8'Посадка') then
             imgui.Checkbox(u8'Посадка деревьев', posadka)
             imgui.SameLine()
             imgui.Text('(?)')
@@ -124,15 +128,56 @@ imgui.OnFrame(function() return Window[0] end, function()
                 cfg.config.bind = encodeJson(exampleHotKey:GetHotKey())
                 inicfg.save(cfg, 'LesHelper.ini')
             end
-
-            imgui.Separator()
-            imgui.Text(u8'При активации функция будет автоматически сажать деревья по назначенной клавише.')
+			
+           imgui.Separator()
+            imgui.Text(u8'Вспомогательные функции для фарма дров.')
             imgui.EndTabItem()
         end
+
+        if imgui.BeginTabItem(u8'Хелпер рыболов') then
+		
+            imgui.Separator()
+            imgui.Text(u8'Вспомогательные функции для ловли рыбы.')
+            imgui.EndTabItem()
+        end
+		
+        -- Вторая вкладка — посадка деревьев
+        if imgui.BeginTabItem(u8'ЦР') then
+            imgui.Separator()
+            imgui.Text(u8'Вспомогательные функции для центрального рынка.')
+            imgui.EndTabItem()
+        end
+
+        if imgui.BeginTabItem(u8'Рулетки') then
+            imgui.Separator()
+            imgui.Text(u8'Вспомогательные функции открытия рулеток')
+            imgui.EndTabItem()
+        end
+		
+if imgui.BeginTabItem(u8'Другое') then
+    imgui.Separator()
+    imgui.Text(u8'Разный шлак ебучий')
+
+    if imgui.Checkbox(u8'Рыбий глаз', camera_zoom_enabled) then
+        cfg.config.camera_zoom_enabled = camera_zoom_enabled[0]
+        inicfg.save(cfg, 'LesHelper.ini')
+    end
+    imgui.SameLine()
+    imgui.Text('(?)')
+    if imgui.IsItemHovered() then
+        imgui.BeginTooltip()
+        imgui.Text(u8'Рыбий глаз (фов изменяет хуле смотришь все понятно)')
+        imgui.EndTooltip()
+    end
+           imgui.Separator()
+            imgui.Text(u8'Шлак ебаный какой-то')
+    imgui.EndTabItem()
+end
 
         if imgui.BeginTabItem(u8'Настройки') then
             imgui.Text(u8'Настройки интерфейса:')
 
+            -- Кнопка растягивания (сохранение состояния)
             if imgui.Button(resizable[0] and u8'Отключить растягивание' or u8'Включить растягивание') then
                 resizable[0] = not resizable[0]
                 cfg.config.resizable = resizable[0]
@@ -157,8 +202,8 @@ imgui.OnFrame(function() return Window[0] end, function()
     imgui.End()
 end)
 
+-- ?? Основной поток
 function main()
-    if not isSampLoaded() or not isSampfuncsLoaded() then return end
     while not isSampAvailable() do wait(100) end
 
     if autoupdate_loaded and enable_autoupdate and Update then
@@ -168,12 +213,13 @@ function main()
     lua_thread.create(RenderRadius)
     lua_thread.create(Collision)
     lua_thread.create(AutoPressH)
+	lua_thread.create(CameraZoom)
     lua_thread.create(posadkaq)
     lua_thread.create(spilivanieq)
 
-    sampAddChatMessage("{00CCFF}[LesHelper] {FFFFFF}Скрипт загружен. Используйте {00CCFF}/leshelp{FFFFFF} для меню.", -1)
-    sampRegisterChatCommand('leshelp', function()
-        Window[0] = not Window[0]
+    sampAddChatMessage("{00CCFF}[PenisHelper.lua] {FFFFFF}Скрипт загружен. Используйте {00CCFF}/penis{FFFFFF} для открытия меню.", -1)
+    sampRegisterChatCommand('penis', function() 
+        Window[0] = not Window[0] 
     end)
 
     if type(cfg.config.bind) ~= 'string' or cfg.config.bind == '' then cfg.config.bind = '[]' end
@@ -181,7 +227,9 @@ function main()
     hotkey.Text.NoKey = u8'Пусто'
     hotkey.Text.WaitForKey = u8'Ожид клавиш'
 
-    while true do wait(0) end
+    while true do
+        wait(0)
+    end
 end
 
 
@@ -264,14 +312,12 @@ function posadkaq()
             until isGameWindowForeground()
         end
         wait(0)
-		
         local stopFlood = false
         if not isSampAvailable() then stopFlood = true end
         if sampIsChatInputActive() then stopFlood = true end
         if sampIsDialogActive() then stopFlood = true end
         if Window[0] then stopFlood = true end
         if not isGameWindowForeground() then stopFlood = true end
-
         if not stopFlood and posadka[0] and wasKeyPressed(table.concat(exampleHotKey:GetHotKey())) then
             sampSendChat("/seat")
         end
@@ -286,7 +332,6 @@ function AutoPressH()
                 wait(500)
             until isGameWindowForeground()
         end
-
         wait(1000)
         if prokachka[0] and isSampAvailable() then
             local px, py, pz = getCharCoordinates(PLAYER_PED)
@@ -306,12 +351,22 @@ function AutoPressH()
     end
 end
 
-
-function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
-    if prokachka[0] then
-        if text:match('{FFFFFF}Будет готов через:') then
-            sampSendDialogResponse(dialogId, 1, 1, nil)
-            return false
+function CameraZoom()
+    enabled = camera_zoom_enabled[0]
+    while true do
+        wait(0)
+        -- если ImGui переключил флаг — обновляем
+        enabled = camera_zoom_enabled[0]
+		if enabled then
+			if isCurrentCharWeapon(PLAYER_PED, 34) and isKeyDown(2) then
+				if not locked then 
+					cameraSetLerpFov(70.0, 70.0, 1000, 1)
+					locked = true
+				end
+			else
+				cameraSetLerpFov(101.0, 101.0, 1000, 1)
+				locked = false
+            end
         end
     end
 end
@@ -324,17 +379,14 @@ function spilivanieq()
         if spilivanie[0] then
             local px, py, pz = getCharCoordinates(PLAYER_PED)
             local tick = os.clock() * 1000
-
             local currentDist = dist_spil[0] or 1.7
             local currentDelay = delay_spil[0] or 50
-
             for _, obj in pairs(getAllObjects()) do
                 if doesObjectExist(obj) then
                     local model = getObjectModel(obj)
                     if treeModels[model] then
                         local _, x, y, z = getObjectCoordinates(obj)
                         local dist = getDistanceBetweenCoords3d(x, y, z, px, py, pz)
-
                         if dist <= currentDist then
                             if tick - lastRotate >= 5 then
                                 local dx, dy = x - px, y - py
@@ -343,7 +395,6 @@ function spilivanieq()
                                 setCameraBehindPlayer()
                                 lastRotate = tick
                             end
-
                             setGameKeyState(17, -128)
                             wait(currentDelay)
                             setGameKeyState(17, 0)
@@ -356,7 +407,6 @@ function spilivanieq()
         end
     end
 end
-
 
 
 
