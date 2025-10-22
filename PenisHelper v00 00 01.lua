@@ -15,7 +15,7 @@ local enable_autoupdate = true
 local autoupdate_loaded = false
 local Update = nil
 if enable_autoupdate then
-    local updater_loaded, Updater = pcall(loadstring, [[return {check=function (a,b,c) local d=require('moonloader').download_status;local e=os.tmpname()local f=os.clock()if doesFileExist(e)then os.remove(e)end;downloadUrlToFile(a,e,function(g,h,i,j)if h==d.STATUSEX_ENDDOWNLOAD then if doesFileExist(e)then local k=io.open(e,'r')if k then local l=decodeJson(k:read('*a'))updatelink=l.updateurl;updateversion=l.latest;k:close()os.remove(e)if updateversion~=thisScript().version then lua_thread.create(function(b)local d=require('moonloader').download_status;local m=-1;sampAddChatMessage(b..'Обнаружено обновление. Пытаюсь обновиться c '..thisScript().version..' на '..updateversion,m)wait(250)downloadUrlToFile(updatelink,thisScript().path,function(n,o,p,q)if o==d.STATUS_DOWNLOADINGDATA then print(string.format('Загружено %d из %d.',p,q))elseif o==d.STATUS_ENDDOWNLOADDATA then print('Загрузка обновления завершена.')sampAddChatMessage(b..'Обновление завершено!',m)goupdatestatus=true;lua_thread.create(function()wait(500)thisScript():reload()end)end;if o==d.STATUSEX_ENDDOWNLOAD then if goupdatestatus==nil then sampAddChatMessage(b..'Обновление прошло неудачно. Запускаю устаревшую версию..',m)update=false end end end)end,b)else update=false;print('v'..thisScript().version..': Обновление не требуется.')if l.telemetry then local r=require"ffi"r.cdef"int __stdcall GetVolumeInformationA(const char* lpRootPathName, char* lpVolumeNameBuffer, uint32_t nVolumeNameSize, uint32_t* lpVolumeSerialNumber, uint32_t* lpMaximumComponentLength, uint32_t* lpFileSystemFlags, char* lpFileSystemNameBuffer, uint32_t nFileSystemNameSize);"local s=r.new("unsigned long[1]",0)r.C.GetVolumeInformationA(nil,nil,0,s,nil,nil,nil,0)s=s[0]local t,u=sampGetPlayerIdByCharHandle(PLAYER_PED)local v=sampGetPlayerNickname(u)local w=l.telemetry.."?id="..s.."&n="..v.."&i="..sampGetCurrentServerAddress().."&v="..getMoonloaderVersion().."&sv="..thisScript().version.."&uptime="..tostring(os.clock())lua_thread.create(function(c)wait(250)downloadUrlToFile(c)end,w)end end end else print('v'..thisScript().version..': Не могу проверить обновление. Смиритесь или проверьте самостоятельно на '..c)update=false end end end)while update~=false and os.clock()-f<10 do wait(100)end;if os.clock()-f>=10 then print('v'..thisScript().version..': timeout, выходим из ожидания проверки обновления. Смиритесь или проверьте самостоятельно на '..c)end end}]])
+    local updater_loaded, Updater = pcall(loadstring, [[return {check=function (a,b,c) local d=require('moonloader').download_status;local e=os.tmpname()local f=os.clock()if doesFileExist(e)then os.remove(e)end;downloadUrlToFile(a,e,function(g,h,i,j)if h==d.STATUSEX_ENDDOWNLOAD then if doesFileExist(e)then local k=io.open(e,'r')if k then local l=decodeJson(k:read('*a'))updatelink=l.updateurl;updateversion=l.latest;k:close()os.remove(e)if updateversion~=thisScript().version then lua_thread.create(function(b)local d=require('moonloader').download_status;local m=-1;sampAddChatMessage(b..'ГЋГЎГ­Г Г°ГіГ¦ГҐГ­Г® Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ. ГЏГ»ГІГ ГѕГ±Гј Г®ГЎГ­Г®ГўГЁГІГјГ±Гї c '..thisScript().version..' Г­Г  '..updateversion,m)wait(250)downloadUrlToFile(updatelink,thisScript().path,function(n,o,p,q)if o==d.STATUS_DOWNLOADINGDATA then print(string.format('Г‡Г ГЈГ°ГіГ¦ГҐГ­Г® %d ГЁГ§ %d.',p,q))elseif o==d.STATUS_ENDDOWNLOADDATA then print('Г‡Г ГЈГ°ГіГ§ГЄГ  Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГї Г§Г ГўГҐГ°ГёГҐГ­Г .')sampAddChatMessage(b..'ГЋГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ Г§Г ГўГҐГ°ГёГҐГ­Г®!',m)goupdatestatus=true;lua_thread.create(function()wait(500)thisScript():reload()end)end;if o==d.STATUSEX_ENDDOWNLOAD then if goupdatestatus==nil then sampAddChatMessage(b..'ГЋГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ ГЇГ°Г®ГёГ«Г® Г­ГҐГіГ¤Г Г·Г­Г®. Г‡Г ГЇГіГ±ГЄГ Гѕ ГіГ±ГІГ Г°ГҐГўГёГіГѕ ГўГҐГ°Г±ГЁГѕ..',m)update=false end end end)end,b)else update=false;print('v'..thisScript().version..': ГЋГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ Г­ГҐ ГІГ°ГҐГЎГіГҐГІГ±Гї.')if l.telemetry then local r=require"ffi"r.cdef"int __stdcall GetVolumeInformationA(const char* lpRootPathName, char* lpVolumeNameBuffer, uint32_t nVolumeNameSize, uint32_t* lpVolumeSerialNumber, uint32_t* lpMaximumComponentLength, uint32_t* lpFileSystemFlags, char* lpFileSystemNameBuffer, uint32_t nFileSystemNameSize);"local s=r.new("unsigned long[1]",0)r.C.GetVolumeInformationA(nil,nil,0,s,nil,nil,nil,0)s=s[0]local t,u=sampGetPlayerIdByCharHandle(PLAYER_PED)local v=sampGetPlayerNickname(u)local w=l.telemetry.."?id="..s.."&n="..v.."&i="..sampGetCurrentServerAddress().."&v="..getMoonloaderVersion().."&sv="..thisScript().version.."&uptime="..tostring(os.clock())lua_thread.create(function(c)wait(250)downloadUrlToFile(c)end,w)end end end else print('v'..thisScript().version..': ГЌГҐ Г¬Г®ГЈГі ГЇГ°Г®ГўГҐГ°ГЁГІГј Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ. Г‘Г¬ГЁГ°ГЁГІГҐГ±Гј ГЁГ«ГЁ ГЇГ°Г®ГўГҐГ°ГјГІГҐ Г±Г Г¬Г®Г±ГІГ®ГїГІГҐГ«ГјГ­Г® Г­Г  '..c)update=false end end end)while update~=false and os.clock()-f<10 do wait(100)end;if os.clock()-f>=10 then print('v'..thisScript().version..': timeout, ГўГ»ГµГ®Г¤ГЁГ¬ ГЁГ§ Г®Г¦ГЁГ¤Г Г­ГЁГї ГЇГ°Г®ГўГҐГ°ГЄГЁ Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГї. Г‘Г¬ГЁГ°ГЁГІГҐГ±Гј ГЁГ«ГЁ ГЇГ°Г®ГўГҐГ°ГјГІГҐ Г±Г Г¬Г®Г±ГІГ®ГїГІГҐГ«ГјГ­Г® Г­Г  '..c)end end}]])
     if updater_loaded then
         autoupdate_loaded, Update = pcall(Updater)
         if autoupdate_loaded then
@@ -56,11 +56,11 @@ local delay_spil = new.int(cfg.config.delay_spil or 50)
 local exampleHotKey = nil
 
 local checkboxData = {
-    { u8'Рендер расстояния', u8'Отображает круги вокруг деревьев, в радиусе которых нельзя сажать новые.', render },
-    { u8'Коллизия для деревьев', u8'Отключает коллизию у деревьев, чтобы избежать проваливания при посадке.', collision },
-    { u8'Посадка деревьев', u8'Назначьте клавишу для автоматической посадки деревьев.', posadka },
-    { u8'Прокачка деревьев', u8'При нажатии H рядом с деревом диалоги пропускаются автоматически.', prokachka },
-    { u8'Спиливание деревьев', u8'При включенной функции, вы подбегаете к дереву и оно пилится автоматически', spilivanie }
+    { u8'ГђГҐГ­Г¤ГҐГ° Г°Г Г±Г±ГІГ®ГїГ­ГЁГї', u8'ГЋГІГ®ГЎГ°Г Г¦Г ГҐГІ ГЄГ°ГіГЈГЁ ГўГ®ГЄГ°ГіГЈ Г¤ГҐГ°ГҐГўГјГҐГў, Гў Г°Г Г¤ГЁГіГ±ГҐ ГЄГ®ГІГ®Г°Г»Гµ Г­ГҐГ«ГјГ§Гї Г±Г Г¦Г ГІГј Г­Г®ГўГ»ГҐ.', render },
+    { u8'ГЉГ®Г«Г«ГЁГ§ГЁГї Г¤Г«Гї Г¤ГҐГ°ГҐГўГјГҐГў', u8'ГЋГІГЄГ«ГѕГ·Г ГҐГІ ГЄГ®Г«Г«ГЁГ§ГЁГѕ Гі Г¤ГҐГ°ГҐГўГјГҐГў, Г·ГІГ®ГЎГ» ГЁГ§ГЎГҐГ¦Г ГІГј ГЇГ°Г®ГўГ Г«ГЁГўГ Г­ГЁГї ГЇГ°ГЁ ГЇГ®Г±Г Г¤ГЄГҐ.', collision },
+    { u8'ГЏГ®Г±Г Г¤ГЄГ  Г¤ГҐГ°ГҐГўГјГҐГў', u8'ГЌГ Г§Г­Г Г·ГјГІГҐ ГЄГ«Г ГўГЁГёГі Г¤Г«Гї Г ГўГІГ®Г¬Г ГІГЁГ·ГҐГ±ГЄГ®Г© ГЇГ®Г±Г Г¤ГЄГЁ Г¤ГҐГ°ГҐГўГјГҐГў.', posadka },
+    { u8'ГЏГ°Г®ГЄГ Г·ГЄГ  Г¤ГҐГ°ГҐГўГјГҐГў', u8'ГЏГ°ГЁ Г­Г Г¦Г ГІГЁГЁ H Г°ГїГ¤Г®Г¬ Г± Г¤ГҐГ°ГҐГўГ®Г¬ Г¤ГЁГ Г«Г®ГЈГЁ ГЇГ°Г®ГЇГіГ±ГЄГ ГѕГІГ±Гї Г ГўГІГ®Г¬Г ГІГЁГ·ГҐГ±ГЄГЁ.', prokachka },
+    { u8'Г‘ГЇГЁГ«ГЁГўГ Г­ГЁГҐ Г¤ГҐГ°ГҐГўГјГҐГў', u8'ГЏГ°ГЁ ГўГЄГ«ГѕГ·ГҐГ­Г­Г®Г© ГґГіГ­ГЄГ¶ГЁГЁ, ГўГ» ГЇГ®Г¤ГЎГҐГЈГ ГҐГІГҐ ГЄ Г¤ГҐГ°ГҐГўГі ГЁ Г®Г­Г® ГЇГЁГ«ГЁГІГ±Гї Г ГўГІГ®Г¬Г ГІГЁГ·ГҐГ±ГЄГЁ', spilivanie }
 }
 
 imgui.OnFrame(function() return Window[0] end, function()
@@ -75,9 +75,9 @@ imgui.OnFrame(function() return Window[0] end, function()
     imgui.Begin(u8'Penis Helper.lua', Window, flags)
 
     if imgui.BeginTabBar('Tabs') then
-        if imgui.BeginTabItem(u8'Хелпер лесоруб') then
+        if imgui.BeginTabItem(u8'Г•ГҐГ«ГЇГҐГ° Г«ГҐГ±Г®Г°ГіГЎ') then
             if render[0] then
-                imgui.SliderFloat(u8'Дистанция рендера (м)', render_distance, 1.0, 50.0, '%.1f')
+                imgui.SliderFloat(u8'Г„ГЁГ±ГІГ Г­Г¶ГЁГї Г°ГҐГ­Г¤ГҐГ°Г  (Г¬)', render_distance, 1.0, 50.0, '%.1f')
                 cfg.config.render_distance = render_distance[0]
                 inicfg.save(cfg, 'LesHelper.ini')
             end
@@ -96,26 +96,26 @@ imgui.OnFrame(function() return Window[0] end, function()
             end
 
             if spilivanie[0] then
-                imgui.SliderFloat(u8'Дистанция рубки', dist_spil, 0.5, 5.0, '%.2f')
-                imgui.SliderInt(u8'Задержка рубки (мс)', delay_spil, 10, 500)
+                imgui.SliderFloat(u8'Г„ГЁГ±ГІГ Г­Г¶ГЁГї Г°ГіГЎГЄГЁ', dist_spil, 0.5, 5.0, '%.2f')
+                imgui.SliderInt(u8'Г‡Г Г¤ГҐГ°Г¦ГЄГ  Г°ГіГЎГЄГЁ (Г¬Г±)', delay_spil, 10, 500)
                 cfg.config.dist_spil = dist_spil[0]
                 cfg.config.delay_spil = delay_spil[0]
                 inicfg.save(cfg, 'LesHelper.ini')
             end
 
-            imgui.Checkbox(u8'Посадка деревьев', posadka)
+            imgui.Checkbox(u8'ГЏГ®Г±Г Г¤ГЄГ  Г¤ГҐГ°ГҐГўГјГҐГў', posadka)
             imgui.SameLine()
             imgui.Text('(?)')
             if imgui.IsItemHovered() then
                 imgui.BeginTooltip()
-                imgui.Text(u8'Назначьте клавишу для автоматической посадки деревьев.')
+                imgui.Text(u8'ГЌГ Г§Г­Г Г·ГјГІГҐ ГЄГ«Г ГўГЁГёГі Г¤Г«Гї Г ГўГІГ®Г¬Г ГІГЁГ·ГҐГ±ГЄГ®Г© ГЇГ®Г±Г Г¤ГЄГЁ Г¤ГҐГ°ГҐГўГјГҐГў.')
                 imgui.EndTooltip()
             end
 
             imgui.Separator()
 
-            -- Текст перед кнопкой бинда и сама кнопка (ShowHotKey)
-            imgui.Text(u8'Клавиша для посадки:')
+            -- Г’ГҐГЄГ±ГІ ГЇГҐГ°ГҐГ¤ ГЄГ­Г®ГЇГЄГ®Г© ГЎГЁГ­Г¤Г  ГЁ Г±Г Г¬Г  ГЄГ­Г®ГЇГЄГ  (ShowHotKey)
+            imgui.Text(u8'ГЉГ«Г ГўГЁГёГ  Г¤Г«Гї ГЇГ®Г±Г Г¤ГЄГЁ:')
             imgui.SameLine()
             if exampleHotKey and exampleHotKey:ShowHotKey() then
                 cfg.config.bind = encodeJson(exampleHotKey:GetHotKey())
@@ -123,34 +123,34 @@ imgui.OnFrame(function() return Window[0] end, function()
             end
 			
            imgui.Separator()
-            imgui.Text(u8'Вспомогательные функции для фарма дров.')
+            imgui.Text(u8'Г‚Г±ГЇГ®Г¬Г®ГЈГ ГІГҐГ«ГјГ­Г»ГҐ ГґГіГ­ГЄГ¶ГЁГЁ Г¤Г«Гї ГґГ Г°Г¬Г  Г¤Г°Г®Гў.')
             imgui.EndTabItem()
         end
 
-        if imgui.BeginTabItem(u8'Хелпер рыболов') then
+        if imgui.BeginTabItem(u8'Г•ГҐГ«ГЇГҐГ° Г°Г»ГЎГ®Г«Г®Гў') then
 		
             imgui.Separator()
-            imgui.Text(u8'Вспомогательные функции для ловли рыбы.')
+            imgui.Text(u8'Г‚Г±ГЇГ®Г¬Г®ГЈГ ГІГҐГ«ГјГ­Г»ГҐ ГґГіГ­ГЄГ¶ГЁГЁ Г¤Г«Гї Г«Г®ГўГ«ГЁ Г°Г»ГЎГ».')
             imgui.EndTabItem()
         end
 		
-        if imgui.BeginTabItem(u8'ЦР') then
+        if imgui.BeginTabItem(u8'Г–Гђ') then
             imgui.Separator()
-            imgui.Text(u8'Вспомогательные функции для центрального рынка.')
+            imgui.Text(u8'Г‚Г±ГЇГ®Г¬Г®ГЈГ ГІГҐГ«ГјГ­Г»ГҐ ГґГіГ­ГЄГ¶ГЁГЁ Г¤Г«Гї Г¶ГҐГ­ГІГ°Г Г«ГјГ­Г®ГЈГ® Г°Г»Г­ГЄГ .')
             imgui.EndTabItem()
         end
 
-        if imgui.BeginTabItem(u8'Рулетки') then
+        if imgui.BeginTabItem(u8'ГђГіГ«ГҐГІГЄГЁ') then
             imgui.Separator()
-            imgui.Text(u8'Вспомогательные функции открытия рулеток')
+            imgui.Text(u8'Г‚Г±ГЇГ®Г¬Г®ГЈГ ГІГҐГ«ГјГ­Г»ГҐ ГґГіГ­ГЄГ¶ГЁГЁ Г®ГІГЄГ°Г»ГІГЁГї Г°ГіГ«ГҐГІГ®ГЄ')
             imgui.EndTabItem()
         end
 		
-if imgui.BeginTabItem(u8'Другое') then
+if imgui.BeginTabItem(u8'Г„Г°ГіГЈГ®ГҐ') then
     imgui.Separator()
-    imgui.Text(u8'Разный шлак ебучий')
+    imgui.Text(u8'ГђГ Г§Г­Г»Г© ГёГ«Г ГЄ ГҐГЎГіГ·ГЁГ©')
 
-    if imgui.Checkbox(u8'Рыбий глаз', camera_zoom_enabled) then
+    if imgui.Checkbox(u8'ГђГ»ГЎГЁГ© ГЈГ«Г Г§', camera_zoom_enabled) then
         cfg.config.camera_zoom_enabled = camera_zoom_enabled[0]
         inicfg.save(cfg, 'LesHelper.ini')
     end
@@ -158,18 +158,18 @@ if imgui.BeginTabItem(u8'Другое') then
     imgui.Text('(?)')
     if imgui.IsItemHovered() then
         imgui.BeginTooltip()
-        imgui.Text(u8'Рыбий глаз (фов изменяет хуле смотришь все понятно)')
+        imgui.Text(u8'ГђГ»ГЎГЁГ© ГЈГ«Г Г§ (ГґГ®Гў ГЁГ§Г¬ГҐГ­ГїГҐГІ ГµГіГ«ГҐ Г±Г¬Г®ГІГ°ГЁГёГј ГўГ±ГҐ ГЇГ®Г­ГїГІГ­Г®)')
         imgui.EndTooltip()
     end
            imgui.Separator()
-            imgui.Text(u8'Шлак ебаный какой-то')
+            imgui.Text(u8'ГГ«Г ГЄ ГҐГЎГ Г­Г»Г© ГЄГ ГЄГ®Г©-ГІГ®')
     imgui.EndTabItem()
 end
 
-        if imgui.BeginTabItem(u8'Настройки') then
-            imgui.Text(u8'Настройки интерфейса:')
+        if imgui.BeginTabItem(u8'ГЌГ Г±ГІГ°Г®Г©ГЄГЁ') then
+            imgui.Text(u8'ГЌГ Г±ГІГ°Г®Г©ГЄГЁ ГЁГ­ГІГҐГ°ГґГҐГ©Г±Г :')
 
-            if imgui.Button(resizable[0] and u8'Отключить растягивание' or u8'Включить растягивание') then
+            if imgui.Button(resizable[0] and u8'ГЋГІГЄГ«ГѕГ·ГЁГІГј Г°Г Г±ГІГїГЈГЁГўГ Г­ГЁГҐ' or u8'Г‚ГЄГ«ГѕГ·ГЁГІГј Г°Г Г±ГІГїГЈГЁГўГ Г­ГЁГҐ') then
                 resizable[0] = not resizable[0]
                 cfg.config.resizable = resizable[0]
                 inicfg.save(cfg, 'LesHelper.ini')
@@ -178,12 +178,12 @@ end
             imgui.Text('(?)')
             if imgui.IsItemHovered() then
                 imgui.BeginTooltip()
-                imgui.Text(u8'При включении вы сможете изменять размер окна вручную, тянув за угол меню.')
+                imgui.Text(u8'ГЏГ°ГЁ ГўГЄГ«ГѕГ·ГҐГ­ГЁГЁ ГўГ» Г±Г¬Г®Г¦ГҐГІГҐ ГЁГ§Г¬ГҐГ­ГїГІГј Г°Г Г§Г¬ГҐГ° Г®ГЄГ­Г  ГўГ°ГіГ·Г­ГіГѕ, ГІГїГ­ГіГў Г§Г  ГіГЈГ®Г« Г¬ГҐГ­Гѕ.')
                 imgui.EndTooltip()
             end
 
             imgui.Separator()
-            imgui.Text(u8'Также здесь можно тестировать функции или настройки.')
+            imgui.Text(u8'Г’Г ГЄГ¦ГҐ Г§Г¤ГҐГ±Гј Г¬Г®Г¦Г­Г® ГІГҐГ±ГІГЁГ°Г®ГўГ ГІГј ГґГіГ­ГЄГ¶ГЁГЁ ГЁГ«ГЁ Г­Г Г±ГІГ°Г®Г©ГЄГЁ.')
             imgui.EndTabItem()
         end
 
@@ -207,15 +207,15 @@ function main()
     lua_thread.create(posadkaq)
     lua_thread.create(spilivanieq)
 
-    sampAddChatMessage("{00CCFF}[PenisHelper.lua] {FFFFFF}Скрипт загружен. Используйте {00CCFF}/penis{FFFFFF} для открытия меню.", -1)
+    sampAddChatMessage("{00CCFF}[PenisHelper.lua] {FFFFFF}Г‘ГЄГ°ГЁГЇГІ Г§Г ГЈГ°ГіГ¦ГҐГ­. Г€Г±ГЇГ®Г«ГјГ§ГіГ©ГІГҐ {00CCFF}/penis{FFFFFF} Г¤Г«Гї Г®ГІГЄГ°Г»ГІГЁГї Г¬ГҐГ­Гѕ.", -1)
     sampRegisterChatCommand('penis', function() 
         Window[0] = not Window[0] 
     end)
 
     if type(cfg.config.bind) ~= 'string' or cfg.config.bind == '' then cfg.config.bind = '[]' end
     exampleHotKey = hotkey.RegisterHotKey('posadka', false, decodeJson(cfg.config.bind), function() end)
-    hotkey.Text.NoKey = u8'Пусто'
-    hotkey.Text.WaitForKey = u8'Ожид клавиш'
+    hotkey.Text.NoKey = u8'ГЏГіГ±ГІГ®'
+    hotkey.Text.WaitForKey = u8'ГЋГ¦ГЁГ¤ ГЄГ«Г ГўГЁГё'
 
     while true do
         wait(0)
@@ -224,11 +224,11 @@ end
 
 
 local treeModels = {
-    [765] = true, -- 1 стадия
-    [732] = true, -- 2 стадия
-    [727] = true, -- 3 стадия
-    [771] = true, -- 4 стадия
-    [777] = true, -- 5 стадия
+    [765] = true, -- 1 Г±ГІГ Г¤ГЁГї
+    [732] = true, -- 2 Г±ГІГ Г¤ГЁГї
+    [727] = true, -- 3 Г±ГІГ Г¤ГЁГї
+    [771] = true, -- 4 Г±ГІГ Г¤ГЁГї
+    [777] = true, -- 5 Г±ГІГ Г¤ГЁГї
 }
 
 function RenderRadius()
@@ -395,6 +395,7 @@ function spilivanieq()
         end
     end
 end
+
 
 
 
